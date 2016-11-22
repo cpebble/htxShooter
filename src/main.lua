@@ -6,12 +6,20 @@ isPaused = false --Variable to check for paused
 
 local player = require "objects.player"
 local bullet = require "objects.bullet"
+local enemy  = require "objects.enemy"
 entities = {}
 
 function love.load()
     -- love.graphics.setBackgroundColor(110, 110, 255, 100)
     player.createPlayer(entities)
     table.insert(entities, player)
+
+    for i = 0, 5 do
+        local x = math.random(love.graphics.getWidth()*0.1, love.graphics.getWidth()*0.9)
+        local y = math.random(0, love.graphics.getHeight()*0.5)
+        table.insert(entities,enemy.createEnemy(x,y))
+    end
+
 end
 
 function love.update(dt)
