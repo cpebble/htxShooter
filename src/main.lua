@@ -2,14 +2,14 @@
 debug = true --Debug mode
 isPaused = false --Variable to check for paused
 
+-- Gamestate = require "hump.gamestate"
+
 local player = require "objects.player"
 local bullet = require "objects.bullet"
---local keyboard = require "keyboard"
-
 entities = {}
 
 function love.load()
-    love.graphics.setBackgroundColor(30, 30, 255, 100)
+    -- love.graphics.setBackgroundColor(110, 110, 255, 100)
     player.createPlayer(entities)
     table.insert(entities, player)
 end

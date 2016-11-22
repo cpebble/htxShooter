@@ -18,9 +18,10 @@ bullet.createBullet = function(x,y,dir, speed)
             love.graphics.polygon("fill", x1,y1,x2,y2,x3,y3)
         end,
         update = function(tabl, dt)
-            
             tabl.x = tabl.x + (tabl.velocity.x*dt)
             tabl.y = tabl.y + (tabl.velocity.y*dt)
+
+            if tabl.y < 200 then tabl = nil end
         end
     }
     return newBullet
