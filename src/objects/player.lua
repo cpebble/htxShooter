@@ -42,7 +42,7 @@ player.update = function (tabl,dt)
     if isDown("w") then velocity[1] = -1*speed elseif isDown("s") then velocity[1] = 1*speed end
     if isDown("a") then velocity[0] = -1*speed elseif isDown("d") then velocity[0] =  1*speed end
 
-    if isDown("space") then player.shoot() print("shoot") end
+    if isDown("space") then player.shoot()  end
 
     player.y = player.y+(velocity[1]*dt);
     player.x = player.x+(velocity[0]*dt);
@@ -54,7 +54,7 @@ player.update = function (tabl,dt)
     --Shooting Logic
 end
 player.shoot = function() -- Returns the bullet object
-    if love.timer.getTime() < player.nextShot then print("no time for shooting") return false else -- now is not the time to shoot
+    if love.timer.getTime() < player.nextShot then return false else -- now is not the time to shoot
         local spawn = player.shotLocation()
         table.insert(entities, bullet.createBullet(spawn.x, spawn.y, {x=0, y=-500}, 0.7))
         --print(love.timer.getTime(), player.nextShot)

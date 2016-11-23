@@ -1,6 +1,9 @@
 collision = {}
 
-collision.isPointInside = function(point,rectangle)--Rectangle = {p1 = {x,y}, p2 = {x,y}} øverste venstre og nederste højre
+collision.isPointInside = function(point,rectangle)
+--Point = {x,y}
+--Rectangle = {p1 = {x,y}, p2 = {x,y}} øverste venstre og nederste højre
+
 --Check p1.x < x < p2.x and p1.y < y < p2.y
     if point.x >= rectangle.p1.x
     and point.x <= rectangle.p2.x
@@ -10,7 +13,7 @@ collision.isPointInside = function(point,rectangle)--Rectangle = {p1 = {x,y}, p2
     end
     return false
 end
-collision.isRectangleInside = function(a, rectangle) --a = a list of points
+collision.isPolygonInside = function(a, rectangle) --a = a list of points
     isInside = false
     for i,p in ipairs(a) do
         print(p)

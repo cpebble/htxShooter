@@ -5,7 +5,7 @@ bullet.createBullet = function(x,y,dir, speed)
         x = x,
         y = y,
         velocity = {x = dir.x *(speed or 1), y = dir.y*(speed or 1)},
-        color = {255,0,0,100},
+        color = {25,25,255,100},
         width = 15,
         height = 15,
         draw = function(tabl) --Make a polygon from a triangle
@@ -15,6 +15,7 @@ bullet.createBullet = function(x,y,dir, speed)
             local y2 = tabl.y
             local x3 = tabl.x
             local y3 = tabl.y - tabl.height
+            love.graphics.setColor(tabl.color)
             love.graphics.polygon("fill", x1,y1,x2,y2,x3,y3)
         end,
         update = function(tabl, dt)
@@ -24,6 +25,7 @@ bullet.createBullet = function(x,y,dir, speed)
             if tabl.y < 200 then tabl = nil end
         end
     }
+    print("shoot")
     return newBullet
 end
 

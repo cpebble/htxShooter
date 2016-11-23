@@ -7,6 +7,8 @@ isPaused = false --Variable to check for paused
 local player = require "objects.player"
 local bullet = require "objects.bullet"
 local enemy  = require "objects.enemy"
+
+local collision = require "collision"
 entities = {}
 
 function love.load()
@@ -25,6 +27,7 @@ end
 function love.update(dt)
     if not isPaused then
         --Loop through entities creating bullets.
+        local toDestruct = {}
         for i,e in ipairs(entities) do
             if type(e.update) == "function" then e.update(e,dt) else
                 if e.velocity then
@@ -32,19 +35,37 @@ function love.update(dt)
                     e.y = e.y + (e.velocity.y*dt)
                 end
             end
+            --Now check if any entities are of screen
+            if not collision.isPointInside({x = e.x, y=e.y}, {p1={x = 0-love.graphics.getWidth()*0.2,y = 0-love.graphics.getHeight()*0.2}, p2 = {x = love.graphics.getWidth()*1.2, y = love.graphics.getHeight()*1.2}}) then --Checks if the objects x and y coordinates is within 120% of the game window
+                print("Element at "..e.x..","..e.y.." Destroyed")
+                table.insert(toDestruct, i)
+            end
         end
+        for i, e in ipairs(toDestruct) do
+            table.remove(entities, e)
+        end
+        toDestruct = nil
+
 
     end
 
 end
 
+
+--Drawing entities:
+--1. test if the entity already has a draw function and execute
+--2. test if the entity has a height, the draw a rectangle using height and (width or height)
+--3. if that fails, draw a circle at the x-y with the width as radius or 20 if that isn't set
 function love.draw()
   for i,e in ipairs(entities) do
       if type(e.draw) == "function" then e.draw(e) else
           love.graphics.setColor(e.color)
-          love.graphics.circle("fill", e.x, e.y, e.width or 20)
+          if e.height then --if we want a square define both height and width
+              love.graphics.rectangle("fill", e.x, e.y, e.width or e.height, e.height)
+          else
+              love.graphics.circle("fill", e.x, e.y, e.width or 20)
+          end
       end
-
 
   end
 

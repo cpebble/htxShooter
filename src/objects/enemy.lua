@@ -6,6 +6,7 @@ enemy.createEnemy = function(x,y)
         y = y,
         velocity = {x=0,y=0},
         width = math.random(10, 50),
+        height = math.random(10,50),
         color = {255,0,0,100}
     }
 
