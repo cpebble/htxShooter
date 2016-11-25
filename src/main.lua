@@ -4,9 +4,11 @@ isPaused = false --Variable to check for paused
 
 -- Gamestate = require "hump.gamestate"
 
-local player = require "objects.player"
 local bullet = require "objects.bullet"
 local enemy  = require "objects.enemy"
+local player = require "objects.player"
+
+local gui =    require "gui"
 
 local collision = require "collision"
 entities = {}
@@ -29,7 +31,7 @@ function love.update(dt)
         --Loop through entities creating bullets.
         local toDestruct = {}
         for i,e in ipairs(entities) do
-            if type(e.update) == "function" then e.update(e,dt) else
+            if type(e.update) == "function" then  if not e.update(e,dt) then table.insert(toDestruct,i) end else
                 if e.velocity then
                     e.x = e.x + (e.velocity.x*dt)
                     e.y = e.y + (e.velocity.y*dt)
@@ -40,13 +42,12 @@ function love.update(dt)
                 print("Element at "..e.x..","..e.y.." Destroyed")
                 table.insert(toDestruct, i)
             end
+            if e.toDestroy == true then table.insert(toDestruct, i) end
         end
         for i, e in ipairs(toDestruct) do
             table.remove(entities, e)
         end
         toDestruct = nil
-
-
     end
 
 end
@@ -66,8 +67,8 @@ function love.draw()
               love.graphics.circle("fill", e.x, e.y, e.width or 20)
           end
       end
-
   end
+  gui.drawHUD()
 
 end
 function love.keypressed(key, scancode, isrepeat)
@@ -93,4 +94,13 @@ function quit()
 end
 function pause()
     isPaused = not isPaused
+end
+
+function getListOfPoints(elem)
+    local list = {
+        {x=elem.x,y=elem.y},
+        {x=elem.x+elem.width,y=elem.y},
+        {x=elem.x+elem.width,y=elem.y+elem.width},
+        {x=elem.x,y=elem.y+elem.width}}
+    return list
 end

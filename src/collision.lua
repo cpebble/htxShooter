@@ -16,7 +16,6 @@ end
 collision.isPolygonInside = function(a, rectangle) --a = a list of points
     isInside = false
     for i,p in ipairs(a) do
-        print(p)
         if not isInside then isInside = collision.isPointInside(p, rectangle) end
     end
     return isInside

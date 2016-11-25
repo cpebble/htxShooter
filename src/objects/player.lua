@@ -10,8 +10,9 @@ player.createPlayer = function(ent)
     player.height=30
     player.color = {20, 255, 20, 100}
     player.speed = 250
+    player.health = 100
+    player.hostile = false --To be destroyed by friendly bullets
     player.shotSpeed = 0.2
-
     player.shotLocation = {}
     player.shotLocation = function() --Return the location of where we want our player to shoot
         local location = {}
@@ -23,6 +24,10 @@ player.createPlayer = function(ent)
     player.nextShot = love.timer.getTime() + player.shotSpeed
 end
 
+player.hit = function(health)
+    player.health = player.health - health
+end
+
 player.draw = function()
     --print("Drawaing player at "..player.x..", "..player.y)
     love.graphics.setColor(player.color)
@@ -32,6 +37,7 @@ player.draw = function()
 end
 
 player.update = function (tabl,dt)
+    --print("playerUpdate")
     local velocity = {0,0}
     velocity[0] = 0
     velocity[1] = 0
@@ -50,8 +56,7 @@ player.update = function (tabl,dt)
     player.x = math.min(math.max(player.x, 0), love.graphics.getWidth()-player.width)
     player.y = math.min(math.max(player.y, 0), love.graphics.getHeight()-player.height)
     --function math.clamp(low, n, high) return math.min(math.max(n, low), high) end
-
-    --Shooting Logic
+    return true
 end
 player.shoot = function() -- Returns the bullet object
     if love.timer.getTime() < player.nextShot then return false else -- now is not the time to shoot
