@@ -5,7 +5,7 @@ bullet.createBullet = function(x,y,dir, speed)
         x = x,
         y = y,
         velocity = {x = dir.x *(speed or 1), y = dir.y*(speed or 1)},
-        color = {25,25,255,100},
+        color = {25,25,255,255},
         width = 15,
         height = 15,
         hostile = false,

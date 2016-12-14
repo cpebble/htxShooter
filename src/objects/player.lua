@@ -2,13 +2,16 @@ player = {}
 
 local bullet = require "objects.bullet"
 
+player.sprite = love.graphics.newImage("res/player.png")
+
 player.createPlayer = function(ent)
     local entities = ent --Bring the table of entities to a local scope
     player.x = love.graphics.getWidth()*0.5
     player.y = love.graphics.getHeight()*0.7
-    player.width = 20
-    player.height=30
-    player.color = {20, 255, 20, 100}
+    player.scale = 0.5
+    player.width = player.sprite:getWidth()*player.scale
+    player.height= player.sprite:getHeight()*player.scale
+    player.color = {255,255,255,255}
     player.speed = 250
     player.health = 100
     player.hostile = false --To be destroyed by friendly bullets
@@ -17,10 +20,11 @@ player.createPlayer = function(ent)
     player.shotLocation = function() --Return the location of where we want our player to shoot
         local location = {}
         location.x = player.x + (0.5*player.width)
-        location.y = player.y + (0.2*player.height)
+        location.y = player.y
         return location
     end
 
+    player.score = 0
     player.nextShot = love.timer.getTime() + player.shotSpeed
 end
 
@@ -31,7 +35,14 @@ end
 player.draw = function()
     --print("Drawaing player at "..player.x..", "..player.y)
     love.graphics.setColor(player.color)
-    love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
+    -- love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
+    love.graphics.draw(player.sprite, player.x, player.y, 0, player.scale, player.scale)
+    if(debug) then
+        love.graphics.setColor(40, 255, 0,100)
+        love.graphics.circle("fill", player.x, player.y, 5, 3)
+        love.graphics.circle("fill", player.shotLocation().x, player.shotLocation().y, 5, 5)
+        love.graphics.rectangle("line", player.x, player.y, player.width, player.height)
+    end
     --print(player.body:getWorldPoints(player.shape:getPoints()))
     --love.graphics.polygon("fill", player.body:getWorldPoints(player.shape:getPoints()));
 end

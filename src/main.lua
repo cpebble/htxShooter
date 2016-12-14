@@ -1,14 +1,15 @@
 
-debug = true --Debug mode
+debug = false --Debug mode
 isPaused = false --Variable to check for paused
 
 -- Gamestate = require "hump.gamestate"
 
-local bullet = require "objects.bullet"
-local enemy  = require "objects.enemy"
-local player = require "objects.player"
+local bullet =      require "objects.bullet"
+local enemy  =      require "objects.enemy"
+local player =      require "objects.player"
 
-local gui =    require "gui"
+local background =  require "background"
+local gui =         require "gui"
 
 local collision = require "collision"
 entities = {}
@@ -18,16 +19,18 @@ function love.load()
     player.createPlayer(entities)
     table.insert(entities, player)
 
+
     for i = 0, 5 do
         local x = math.random(love.graphics.getWidth()*0.1, love.graphics.getWidth()*0.9)
         local y = math.random(0, love.graphics.getHeight()*0.5)
-        table.insert(entities,enemy.createEnemy(x,y))
+        table.insert(entities,enemy.createEnemy(x,y,{x=0, y=100}))
     end
 
 end
 
 function love.update(dt)
     if not isPaused then
+        background.update(dt)
         --Loop through entities creating bullets.
         local toDestruct = {}
         for i,e in ipairs(entities) do
@@ -39,8 +42,10 @@ function love.update(dt)
             end
             --Now check if any entities are of screen
             if not collision.isPointInside({x = e.x, y=e.y}, {p1={x = 0-love.graphics.getWidth()*0.2,y = 0-love.graphics.getHeight()*0.2}, p2 = {x = love.graphics.getWidth()*1.2, y = love.graphics.getHeight()*1.2}}) then --Checks if the objects x and y coordinates is within 120% of the game window
-                print("Element at "..e.x..","..e.y.." Destroyed")
-                table.insert(toDestruct, i)
+                if type(e.destroy) == "function" and e.destroy(e) then else
+                    print("Element at "..e.x..","..e.y.." Destroyed")
+                    table.insert(toDestruct, i)
+                end
             end
             if e.toDestroy == true then table.insert(toDestruct, i) end
         end
@@ -58,16 +63,17 @@ end
 --2. test if the entity has a height, the draw a rectangle using height and (width or height)
 --3. if that fails, draw a circle at the x-y with the width as radius or 20 if that isn't set
 function love.draw()
-  for i,e in ipairs(entities) do
-      if type(e.draw) == "function" then e.draw(e) else
-          love.graphics.setColor(e.color)
-          if e.height then --if we want a square define both height and width
-              love.graphics.rectangle("fill", e.x, e.y, e.width or e.height, e.height)
-          else
-              love.graphics.circle("fill", e.x, e.y, e.width or 20)
-          end
-      end
-  end
+    background.draw()
+    for i,e in ipairs(entities) do
+        if type(e.draw) == "function" then e.draw(e) else
+            love.graphics.setColor(e.color)
+            if e.height then --if we want a square define both height and width
+                love.graphics.rectangle("fill", e.x, e.y, e.width or e.height, e.height)
+            else
+                love.graphics.circle("fill", e.x, e.y, e.width or 20)
+            end
+        end
+    end
   gui.drawHUD()
 
 end
@@ -82,13 +88,15 @@ function checkKeybinds(key)
     local keybinds = {
         ['p'] = pause,
         ['q'] = quit,
+        ['k'] = debugToggle
     }
+
 
 
   local k = type(keybinds[key]) == "function" and keybinds[key]() or print(key.." Not defined")
       print(key.." pressed", keybinds[key])
 end
-
+function debugToggle() debug = not debug end
 function quit()
     love.event.quit("exit")
 end
