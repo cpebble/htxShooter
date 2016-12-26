@@ -14,6 +14,7 @@ player.createPlayer = function(ent)
     player.color = {255,255,255,255}
     player.speed = 250
     player.health = 100
+    player.score = 0
     player.hostile = false --To be destroyed by friendly bullets
     player.shotSpeed = 0.2
     player.shotLocation = {}
@@ -26,6 +27,10 @@ player.createPlayer = function(ent)
 
     player.score = 0
     player.nextShot = love.timer.getTime() + player.shotSpeed
+end
+
+player.addScore = function(inc)
+    player.score = player.score + inc
 end
 
 player.hit = function(health)
@@ -56,8 +61,8 @@ player.update = function (tabl,dt)
     local isDown = love.keyboard.isDown
     local speed = player.speed
     --Calculate velocity from keyboard
-    if isDown("w") then velocity[1] = -1*speed elseif isDown("s") then velocity[1] = 1*speed end
-    if isDown("a") then velocity[0] = -1*speed elseif isDown("d") then velocity[0] =  1*speed end
+    if isDown("w", "up") then velocity[1] = -1*speed elseif isDown("s", "down") then velocity[1] = 1*speed end
+    if isDown("a", "left") then velocity[0] = -1*speed elseif isDown("d", "right") then velocity[0] =  1*speed end
 
     if isDown("space") then player.shoot()  end
 

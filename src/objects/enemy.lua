@@ -1,28 +1,38 @@
 --Original work by Christian Påbøl. Licensed under the MIT license ©
 enemy = {}
 
-local types = {--Objects = types of enemies: contains a list of points, health and graphic path
-enem1 = {
-    damage = 10,
-    sprite = love.graphics.newImage("res/enem1.png"),
-    scale=0.5,
-    width = 104,
-    height = 146,
-    health = 1
-},
+local types = {}--Objects = types of enemies: contains a list of points, health and graphic path
+types[0] = {
+        damage = 10,
+        sprite = love.graphics.newImage("res/enem1.png"),
+        scale = 0.5,
+        width = 104,
+        height = 146,
+        health = 1,
+        value = 15
+    }
+types[1] = {
+        damage = 20,
+        sprite = love.graphics.newImage("res/enem2.png"),
+        scale = 0.5,
+        width = 83,
+        height = 138,
+        health = 3,
+        value = 50
+    }
 
-}
 
 enemy.createEnemy = function(x,y,velocity, type)
     local newEnemy = {
         x = x,
         y = y,
-        type = types.enem1,
+        type = type or types[math.random(0, #types)],
         velocity = velocity,
 
         hit = function(elem,dmg)
             elem.health = elem.health - dmg
             if elem.health <= 0 then
+                player.addScore(elem.value)
                 elem.destroy(elem)
             end
             print("enemy hit")
@@ -63,6 +73,7 @@ enemy.createEnemy = function(x,y,velocity, type)
     newEnemy.hostile = true
     newEnemy.damage = newEnemy.type.damage
     newEnemy.scale = newEnemy.type.scale
+    newEnemy.value = newEnemy.type.value
 
     return newEnemy
 end

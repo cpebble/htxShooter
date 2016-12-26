@@ -1,4 +1,4 @@
-
+luaDebug = debug
 debug = false --Debug mode
 isPaused = false --Variable to check for paused
 
@@ -21,9 +21,7 @@ function love.load()
 
 
     for i = 0, 5 do
-        local x = math.random(love.graphics.getWidth()*0.1, love.graphics.getWidth()*0.9)
-        local y = math.random(0, love.graphics.getHeight()*0.5)
-        table.insert(entities,enemy.createEnemy(x,y,{x=0, y=100}))
+        createRandomEnemy()
     end
 
 end
@@ -53,10 +51,17 @@ function love.update(dt)
             table.remove(entities, e)
         end
         toDestruct = nil
+
+        --Spawn random enemies:
+        if math.random(0,100) == 25 and #entities < 100 then createRandomEnemy() end
     end
 
 end
-
+function createRandomEnemy()
+    local x = math.random(love.graphics.getWidth()*0.1, love.graphics.getWidth()*0.9)
+    local y = math.random(0, -love.graphics.getHeight()*0.5)
+    table.insert(entities,enemy.createEnemy(x,y,{x=0, y=100}))
+end
 
 --Drawing entities:
 --1. test if the entity already has a draw function and execute
@@ -88,7 +93,8 @@ function checkKeybinds(key)
     local keybinds = {
         ['p'] = pause,
         ['q'] = quit,
-        ['k'] = debugToggle
+        ['k'] = debugToggle,
+        ['='] = luaDebug.debug
     }
 
 

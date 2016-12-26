@@ -14,6 +14,19 @@ local HUD = {
             love.graphics.setColor(0,255,0,100) --Green healthbar
             love.graphics.rectangle("fill", elem.x, elem.y, greenWidth, barHeight)
         end
+    },
+    score = {
+        x = 0,
+        y = 50,
+        scale = 10,
+        font = love.graphics.newImageFont("res/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""),
+        draw = function(elem)
+            local score = player.score
+            love.graphics.setFont(elem.font)
+            love.graphics.setColor(40,255,0,255)
+            love.graphics.printf(player.score, elem.x, elem.y, love.graphics.getWidth(), "center", 0)
+
+        end
     }
 
 } --List of objects to display as the HUD

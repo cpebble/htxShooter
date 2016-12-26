@@ -2,7 +2,7 @@
 overlord = {}
 
 local waves = {}
-waves = []
+waves = {}
 
 
 overlord.update = function()
