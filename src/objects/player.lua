@@ -35,6 +35,12 @@ end
 
 player.hit = function(health)
     player.health = player.health - health
+    if player.health <= 0 then
+        player.speed = 0
+        player.color = {0,0,0,0}
+        player.x = -player.width
+        player.y = -player.height
+    end
 end
 
 player.draw = function()

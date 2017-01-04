@@ -47,7 +47,7 @@ background.draw = function()
     love.graphics.setColor(255, 255, 255)
     --love.graphics.draw(waterTile, 0, 0)
     love.graphics.draw(backgroundBatch) --Draw the batch with the scrolling offset
-    print(offset)
+    --print(offset)
 end
 
 

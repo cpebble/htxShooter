@@ -7,11 +7,11 @@ local HUD = {
         draw = function(elem)
             local health = player.health
             local barWidth = love.graphics.getWidth() / 5
-            local greenWidth = (health) * (barWidth) / (100 - 0)
+            local greenWidth = clamp(0, (health) * (barWidth) / (100 - 0), barWidth)
             local barHeight = 30
-            love.graphics.setColor(255, 0, 0, 50) --Red health bar
+            love.graphics.setColor(255, 0, 0, 100) --Red health bar
             love.graphics.rectangle("fill", elem.x, elem.y, barWidth, barHeight)
-            love.graphics.setColor(0,255,0,100) --Green healthbar
+            love.graphics.setColor(0,255,0,130) --Green healthbar
             love.graphics.rectangle("fill", elem.x, elem.y, greenWidth, barHeight)
         end
     },

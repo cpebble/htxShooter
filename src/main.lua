@@ -118,3 +118,7 @@ function getListOfPoints(elem)
         {x=elem.x,y=elem.y+elem.width}}
     return list
 end
+
+function clamp(min, val, max)
+    return math.max(min, math.min(val, max));
+end
